@@ -1084,7 +1084,17 @@ void handleLanKeypress() {
 int gameLoop() {
   // int posx = 0, posy = SCREEN_HEIGHT / 2;
   // Game loop
+  int count = 0;
+  int deadCount = -1;
   for (bool quit = 0; !quit;) {
+      count ++;
+//      printf("%d\n", count);
+      if (count == INT_MAX) {
+          count = 0;
+          if (deadCount != -1) {
+              deadCount = count - INT_MAX;
+          }
+      }
     quit = handleLocalKeypress();
     if (quit) sendGameOverPacket(3);
     if (lanClientSocket != NULL) handleLanKeypress();
@@ -1139,6 +1149,19 @@ int gameLoop() {
         for (int i = 0; i < playersCount; i++) {
             if (spriteSnake[i]->sprites->head) {
                 alivePlayer ++;
+            } else {
+//                spriteSnake[i]->sprites = createLinkList();
+
+                if (deadCount == -1) {
+                    deadCount = count;
+                } else {
+                    if (count - deadCount > 500) {
+//                        spriteSnake[i]->sprites = createLinkList();
+                        appendSpriteToSnake(spriteSnake[i], SPRITE_KNIGHT, SCREEN_WIDTH / 2,
+                                            SCREEN_HEIGHT / 2 + playersCount * 2 * UNIT, RIGHT);
+                        deadCount = -1;
+                    }
+                }
             }
         }
         if (alivePlayer == 0) {
