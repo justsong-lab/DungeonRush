@@ -1165,7 +1165,7 @@ int gameLoop() {
             }
         }
         if (alivePlayer == 0) {
-            setTerm(GAME_OVER);
+            setTerm(STAGE_CLEAR);
             sendGameOverPacket(alivePlayer);
             break;
         }
