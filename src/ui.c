@@ -16,6 +16,7 @@
 #include "storage.h"
 #include "text.h"
 #include "types.h"
+#include "config.h"
 
 extern LinkList animationsList[];
 extern bool hasMap[MAP_SIZE][MAP_SIZE];
@@ -192,7 +193,11 @@ void launchLanGame() {
   if (opt == 0) {
     hostGame();
   } else {
-    char* ip = inputUi();
+    char* ip = loadConfig();
+    if (!ip) {
+        ip = inputUi();
+        saveConfig(ip);
+    }
     if (ip == NULL) return;
     joinGame(ip, LAN_LISTEN_PORT);
     free(ip);
