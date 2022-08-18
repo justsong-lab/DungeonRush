@@ -163,7 +163,7 @@ void appendSpriteToSnake(
 void initPlayer(int playerType) {
   spritesCount++;
   Snake* p = spriteSnake[playersCount] =
-      createSnake(MOVE_STEP, playersCount, playerType);
+      createSnake(MOVE_STEP, 0, playerType);
   appendSpriteToSnake(p, SPRITE_KNIGHT, SCREEN_WIDTH / 2,
                       SCREEN_HEIGHT / 2 + playersCount * 2 * UNIT, RIGHT);
   playersCount++;
@@ -1126,15 +1126,26 @@ int gameLoop() {
       termCount--;
       if (!termCount) break;
     } else {
-      int alivePlayer = -1;
-      for (int i = 0; i < playersCount; i++) {
-        if (!spriteSnake[i]->sprites->head) {
-          setTerm(GAME_OVER);
-          sendGameOverPacket(alivePlayer);
-          break;
-        } else
-          alivePlayer = i;
-      }
+//      int alivePlayer = -1;
+//      for (int i = 0; i < playersCount; i++) {
+//        if (!spriteSnake[i]->sprites->head) {
+//          setTerm(GAME_OVER);
+//          sendGameOverPacket(alivePlayer);
+//          break;
+//        } else
+//          alivePlayer = i;
+//      }
+        int alivePlayer = 0;
+        for (int i = 0; i < playersCount; i++) {
+            if (spriteSnake[i]->sprites->head) {
+                alivePlayer ++;
+            }
+        }
+        if (alivePlayer == 0) {
+            setTerm(GAME_OVER);
+            sendGameOverPacket(alivePlayer);
+            break;
+        }
       if (isWin()) {
         setTerm(STAGE_CLEAR);
       }

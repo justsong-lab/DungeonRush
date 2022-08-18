@@ -10,3 +10,4 @@ dungeon_rush
 build
 cmake-build-*
 .idea
+release
